@@ -259,6 +259,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   debug
+  devise
   devise_token_auth
   factory_bot_rails
   letter_opener_web
