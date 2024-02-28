@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Tweet < ApplicationRecord
   include Rails.application.routes.url_helpers
 
