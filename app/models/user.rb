@@ -14,5 +14,7 @@ class User < ApplicationRecord
   validates :phone, presence: true, format: { with: /\A[0-9]+\z/ }
   validates :birthday, presence: true
 
+  has_many :tweets, dependent: :destroy
+
   include DeviseTokenAuth::Concerns::User
 end
