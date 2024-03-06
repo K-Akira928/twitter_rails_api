@@ -11,6 +11,23 @@ module Api
                status: :ok
       end
 
+      def update
+        user = current_api_v1_user
+
+        if user.update(user_params)
+          render json: { status: :updated },
+                 status: :ok
+        else
+          render json: { errors: user.errors },
+                 status: :unprocessable_entity
+        end
+      end
+
+      private
+
+      def user_params
+        params.require(:user).permit(:header, :icon, :nickname, :bio, :location, :website, :phone)
+      end
     end
   end
 end
