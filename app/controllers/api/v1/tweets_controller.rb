@@ -33,8 +33,8 @@ module Api
       end
 
       def destroy
-        tweet = Tweet.find(params[:id])
-        return if tweet.user != current_api_v1_user
+        tweet = current_api_v1_user.tweets.find(params[:id])
+        return if tweet.blank?
 
         if tweet.destroy
           render json: { status: :deleted, deleted_id: params[:id] },
