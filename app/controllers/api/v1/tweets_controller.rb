@@ -44,6 +44,14 @@ module Api
         end
       end
 
+      def comments
+        tweet = Tweet.find(params[:id])
+        comments = Tweet.convert_hash_data(tweet.comment_tweets)
+
+        render json: { comments: },
+               status: :ok
+      end
+
       private
 
       def tweet_params
