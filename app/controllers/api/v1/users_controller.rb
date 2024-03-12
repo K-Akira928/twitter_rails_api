@@ -5,7 +5,7 @@ module Api
     class UsersController < ApplicationController
       def show
         user = User.find_by(name: params[:name])
-        tweets = Tweet.convert_hash_data(user.tweets.related_preload.created_sort)
+        tweets = Tweet.convert_hash_data(tweets_by_tab(user, params[:tab]))
 
         render json: { user: user.hash_data[:user], tweets:, is_current_user: user == current_api_v1_user },
                status: :ok
@@ -27,6 +27,15 @@ module Api
 
       def user_params
         params.require(:user).permit(:header, :icon, :nickname, :bio, :location, :website, :phone)
+      end
+
+      def tweets_by_tab(user, tab)
+        case tab
+        when 'tweets'
+          user.tweets.not_comment_tweets
+        when 'comments'
+          user.tweets.comment_tweets
+        end
       end
     end
   end
