@@ -5,7 +5,7 @@ module Api
     class UsersController < ApplicationController
       def show
         user = User.find_by(name: params[:name])
-        tweets = Tweet.convert_hash_data(tweets_by_tab(user, params[:tab]))
+        tweets = Tweet.convert_hash_data(tweets_by_tab(user, params[:tab]), current_api_v1_user)
 
         render json: { user: user.hash_data[:user], tweets:, is_current_user: user == current_api_v1_user },
                status: :ok
