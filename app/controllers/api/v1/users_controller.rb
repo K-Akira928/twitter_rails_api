@@ -23,6 +23,18 @@ module Api
         end
       end
 
+      def follow
+        follow_user = User.find_by(name: params[:name])
+        follows = current_api_v1_user.follows.build(follow_user_id: follow_user.id)
+        if follows.save
+          render json: { status: :follow },
+                 status: :ok
+        else
+          render json: { messages: 'フォローに失敗しました' },
+                 status: :bad_request
+        end
+      end
+
       private
 
       def user_params

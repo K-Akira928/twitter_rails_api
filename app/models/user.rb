@@ -46,8 +46,18 @@ class User < ApplicationRecord
     { header: header.attached? ? url_for(header) : nil }
   end
 
-  def hash_data
-    { user: JSON.parse(to_json).merge(icon_url).merge(header_url) }
+  def hash_data(current_user)
+    { user: JSON.parse(to_json).merge(icon_url).merge(header_url).merge(user_action(current_user)) }
+  end
+
+  def user_action(current_user)
+    { action: {
+      follow: follow_action(current_user)
+    } }
+  end
+
+  def follow_action(current_user)
+    follower_users.include?(current_user)
   end
 
   include DeviseTokenAuth::Concerns::User
