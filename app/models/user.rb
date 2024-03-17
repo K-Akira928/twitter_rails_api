@@ -20,6 +20,24 @@ class User < ApplicationRecord
   has_one_attached :icon
   has_one_attached :header
 
+  has_many(
+    :follows,
+    class_name: 'Follow',
+    foreign_key: :follower_user_id,
+    dependent: :destroy,
+    inverse_of: :follower_user
+  )
+  has_many :follow_users, through: :follows, source: :follow_user
+
+  has_many(
+    :followers,
+    class_name: 'Follow',
+    foreign_key: :follow_user_id,
+    dependent: :destroy,
+    inverse_of: :follow_user
+  )
+  has_many :follower_users, through: :followers, source: :follower_user
+
   def icon_url
     { icon: icon.attached? ? url_for(icon) : nil }
   end
@@ -28,8 +46,18 @@ class User < ApplicationRecord
     { header: header.attached? ? url_for(header) : nil }
   end
 
-  def hash_data
-    { user: JSON.parse(to_json).merge(icon_url).merge(header_url) }
+  def hash_data(current_user)
+    { user: JSON.parse(to_json).merge(icon_url).merge(header_url).merge(user_action(current_user)) }
+  end
+
+  def user_action(current_user)
+    { action: {
+      follow: follow_action(current_user)
+    } }
+  end
+
+  def follow_action(current_user)
+    follower_users.include?(current_user)
   end
 
   include DeviseTokenAuth::Concerns::User
