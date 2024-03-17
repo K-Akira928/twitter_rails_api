@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       resources :users, param: :name, only: %i[show update] do
         member do
           post :follow
+          delete :unfollow
         end
       end
     end
