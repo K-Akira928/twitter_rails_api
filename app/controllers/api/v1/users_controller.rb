@@ -36,6 +36,18 @@ module Api
         end
       end
 
+      def unfollow
+        unfollow_user = User.find_by(name: params[:name])
+        follows = current_api_v1_user.follows.find_by(follow_user_id: unfollow_user.id)
+        if follows.destroy
+          render json: { status: :unfollow },
+                 status: :ok
+        else
+          render json: { messages: 'フォロー解除に失敗しました' },
+                 status: :bad_request
+        end
+      end
+
       private
 
       def user_params
