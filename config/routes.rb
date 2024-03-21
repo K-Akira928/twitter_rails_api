@@ -24,6 +24,7 @@ Rails.application.routes.draw do
           delete :unfollow
         end
       end
+      resources :notifications, only: %i[index]
     end
   end
   resources :tasks
