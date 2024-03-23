@@ -38,6 +38,24 @@ class User < ApplicationRecord
   )
   has_many :follower_users, through: :followers, source: :follower_user
 
+  has_many(
+    :noticeds,
+    class_name: 'Notice',
+    foreign_key: :noticed_user_id,
+    dependent: :destroy,
+    inverse_of: :noticed_user
+  )
+  has_many :noticed_users, through: :noticeds, source: :notice_user
+
+  has_many(
+    :notices,
+    class_name: 'Notice',
+    foreign_key: :notice_user_id,
+    dependent: :destroy,
+    inverse_of: :notice_user
+  )
+  has_many :notice_users, through: :notices, source: :noticed_user
+
   def icon_url
     { icon: icon.attached? ? url_for(icon) : nil }
   end
